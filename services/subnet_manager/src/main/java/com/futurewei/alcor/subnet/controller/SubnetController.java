@@ -19,6 +19,7 @@ package com.futurewei.alcor.subnet.controller;
 import com.futurewei.alcor.common.exception.*;
 import com.futurewei.alcor.common.entity.ResponseId;
 
+import com.futurewei.alcor.common.stats.DurationStatistics;
 import com.futurewei.alcor.common.utils.CommonUtil;
 import com.futurewei.alcor.common.utils.ControllerUtil;
 import com.futurewei.alcor.common.utils.DateUtil;
@@ -40,6 +41,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.thymeleaf.util.StringUtils;
@@ -55,6 +57,7 @@ import java.util.stream.Collectors;
 import static org.springframework.web.bind.annotation.RequestMethod.*;
 
 @RestController
+@ComponentScan(value = "com.futurewei.alcor.common.stats")
 public class SubnetController {
 
     @Autowired
@@ -72,6 +75,7 @@ public class SubnetController {
     @RequestMapping(
             method = GET,
             value = {"/project/{projectId}/subnets/{subnetId}"})
+    @DurationStatistics
     public SubnetWebJson getSubnetStateById(@PathVariable String projectId, @PathVariable String subnetId) throws Exception {
 
         SubnetEntity subnetEntity = null;
@@ -100,6 +104,7 @@ public class SubnetController {
             method = POST,
             value = {"/project/{projectId}/subnets/bulk"})
     @ResponseStatus(HttpStatus.CREATED)
+    @DurationStatistics
     public SubnetsWebJson createSubnetStateBulk(@PathVariable String projectId, @RequestBody SubnetWebJson resource) throws Exception {
         return new SubnetsWebJson();
     }
@@ -108,6 +113,7 @@ public class SubnetController {
             method = POST,
             value = {"/project/{projectId}/subnets"})
     @ResponseStatus(HttpStatus.CREATED)
+    @DurationStatistics
     public SubnetWebJson createSubnetState(@PathVariable String projectId, @RequestBody SubnetRequestWebJson resource) throws Exception {
         long start = System.currentTimeMillis();
         SubnetEntity inSubnetEntity = new SubnetEntity();
@@ -276,6 +282,7 @@ public class SubnetController {
     @RequestMapping(
             method = PUT,
             value = {"/project/{projectId}/subnets/{subnetId}"})
+    @DurationStatistics
     public SubnetWebJson updateSubnetState(@PathVariable String projectId, @PathVariable String subnetId, @RequestBody SubnetRequestWebJson resource) throws Exception {
 
         SubnetEntity subnetEntity = null;
@@ -329,6 +336,7 @@ public class SubnetController {
     @RequestMapping(
             method = DELETE,
             value = {"/project/{projectId}/subnets/{subnetId}"})
+    @DurationStatistics
     public ResponseId deleteSubnetState(@PathVariable String projectId, @PathVariable String subnetId) throws Exception {
 
         SubnetEntity subnetEntity = null;
@@ -361,6 +369,7 @@ public class SubnetController {
     @RequestMapping(
             method = GET,
             value = "/project/{projectId}/subnets")
+    @DurationStatistics
     public SubnetsWebJson getSubnetStatesByProjectIdAndVpcId(@PathVariable String projectId) throws Exception {
 
         Map<String, Object[]> queryParams =

@@ -61,6 +61,13 @@ public class PortRepository {
         LOG.info("PortRepository init done");
     }
 
+    public void addPortEntities(List<PortEntity> portEntities) throws CacheException {
+        Map<String, PortEntity> portEntityMap = portEntities
+                .stream()
+                .collect(Collectors.toMap(PortEntity::getId, Function.identity()));
+        portCache.putAll(portEntityMap);
+    }
+
     @DurationStatistics
     public PortEntity findPortEntity(String portId) throws CacheException {
         return portCache.get(portId);

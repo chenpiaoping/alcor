@@ -20,6 +20,7 @@ import com.futurewei.alcor.common.db.CacheFactory;
 import com.futurewei.alcor.common.db.ICache;
 import com.futurewei.alcor.common.db.Transaction;
 import com.futurewei.alcor.common.db.repo.ICacheRepository;
+import com.futurewei.alcor.common.stats.DurationStatistics;
 import com.futurewei.alcor.privateipmanager.entity.IpAddrAlloc;
 import com.futurewei.alcor.privateipmanager.entity.IpAddrRange;
 import com.futurewei.alcor.privateipmanager.entity.VpcIpRange;
@@ -59,6 +60,7 @@ public class IpAddrRangeRepo implements ICacheRepository<IpAddrRange> {
     }
 
     @Override
+    @DurationStatistics
     public synchronized IpAddrRange findItem(String rangeId) {
         try {
             return ipAddrRangeCache.get(rangeId);
@@ -71,6 +73,7 @@ public class IpAddrRangeRepo implements ICacheRepository<IpAddrRange> {
     }
 
     @Override
+    @DurationStatistics
     public synchronized Map<String, IpAddrRange> findAllItems() {
         try {
             return ipAddrRangeCache.getAll();
@@ -83,6 +86,7 @@ public class IpAddrRangeRepo implements ICacheRepository<IpAddrRange> {
     }
 
     @Override
+    @DurationStatistics
     public Map<String, IpAddrRange> findAllItems(Map<String, Object[]> queryParams) throws CacheException {
         try {
             return ipAddrRangeCache.getAll(queryParams);
@@ -95,6 +99,7 @@ public class IpAddrRangeRepo implements ICacheRepository<IpAddrRange> {
     }
 
     @Override
+    @DurationStatistics
     public synchronized void addItem(IpAddrRange ipAddrRange) {
         LOG.error("Add ipAddrRange:{}", ipAddrRange);
 
@@ -107,6 +112,7 @@ public class IpAddrRangeRepo implements ICacheRepository<IpAddrRange> {
     }
 
     @Override
+    @DurationStatistics
     public synchronized void deleteItem(String rangeId) {
         LOG.error("Delete rangeId:{}", rangeId);
 
@@ -158,6 +164,7 @@ public class IpAddrRangeRepo implements ICacheRepository<IpAddrRange> {
      * @return Ip address assigned from ip range
      * @throws Exception Db operation or ip address assignment exception
      */
+    @DurationStatistics
     public synchronized IpAddrAlloc allocateIpAddr(IpAddrRequest request) throws Exception {
         try (Transaction tx = ipAddrRangeCache.getTransaction().start()) {
             IpAddrAlloc ipAddrAlloc;
@@ -186,6 +193,7 @@ public class IpAddrRangeRepo implements ICacheRepository<IpAddrRange> {
      * @return Number of ip addresses assigned each ip range
      * @throws Exception Db operation or ip address assignment exception
      */
+    @DurationStatistics
     public synchronized Map<String, List<IpAddrAlloc>> allocateIpAddrBulk(Map<String, Integer> requests) throws Exception {
         Map<String, List<IpAddrAlloc>> result = new HashMap<>();
 
@@ -208,6 +216,7 @@ public class IpAddrRangeRepo implements ICacheRepository<IpAddrRange> {
         return result;
     }
 
+    @DurationStatistics
     public synchronized void modifyIpAddrState(String rangeId, String ipAddr, String state) throws Exception {
         try (Transaction tx = ipAddrRangeCache.getTransaction().start()) {
             IpAddrRange ipAddrRange = ipAddrRangeCache.get(rangeId);
@@ -222,6 +231,7 @@ public class IpAddrRangeRepo implements ICacheRepository<IpAddrRange> {
         }
     }
 
+    @DurationStatistics
     public synchronized void releaseIpAddr(String rangeId, String ipAddr) throws Exception {
         try (Transaction tx = ipAddrRangeCache.getTransaction().start()) {
             IpAddrRange ipAddrRange = ipAddrRangeCache.get(rangeId);
@@ -236,6 +246,7 @@ public class IpAddrRangeRepo implements ICacheRepository<IpAddrRange> {
         }
     }
 
+    @DurationStatistics
     public synchronized void releaseIpAddrBulk(Map<String, List<String>> requests) throws Exception {
         try (Transaction tx = ipAddrRangeCache.getTransaction().start()) {
             for (Map.Entry<String, List<String>> entry: requests.entrySet()) {
@@ -252,6 +263,7 @@ public class IpAddrRangeRepo implements ICacheRepository<IpAddrRange> {
         }
     }
 
+    @DurationStatistics
     public synchronized IpAddrAlloc getIpAddr(String rangeId, String ipAddr) throws Exception {
         IpAddrRange ipAddrRange = ipAddrRangeCache.get(rangeId);
         if (ipAddrRange == null) {
@@ -261,6 +273,7 @@ public class IpAddrRangeRepo implements ICacheRepository<IpAddrRange> {
         return ipAddrRange.getIpAddr(ipAddr);
     }
 
+    @DurationStatistics
     public synchronized Collection<IpAddrAlloc> getIpAddrBulk(String rangeId) throws Exception {
         IpAddrRange ipAddrRange = ipAddrRangeCache.get(rangeId);
         if (ipAddrRange == null) {
@@ -270,6 +283,7 @@ public class IpAddrRangeRepo implements ICacheRepository<IpAddrRange> {
         return ipAddrRange.getIpAddrBulk();
     }
 
+    @DurationStatistics
     public synchronized void createIpAddrRange(IpAddrRangeRequest request) throws Exception {
         try (Transaction tx = ipAddrRangeCache.getTransaction().start()) {
             if (ipAddrRangeCache.get(request.getId()) != null) {
@@ -282,11 +296,13 @@ public class IpAddrRangeRepo implements ICacheRepository<IpAddrRange> {
 
             ipAddrRangeCache.put(request.getId(), ipAddrRange);
 
+            /*
             ipAddrRange = ipAddrRangeCache.get(request.getId());
             if (ipAddrRange == null) {
                 LOG.warn("Create ip address range failed: Internal db operation error");
                 throw new InternalDbOperationException();
             }
+             */
 
             VpcIpRange vpcIpRange = vpcIpRangeCache.get(request.getVpcId());
             if (vpcIpRange == null) {
@@ -315,6 +331,7 @@ public class IpAddrRangeRepo implements ICacheRepository<IpAddrRange> {
         }
     }
 
+    @DurationStatistics
     public synchronized IpAddrRange deleteIpAddrRange(String rangeId) throws Exception {
         try (Transaction tx = ipAddrRangeCache.getTransaction().start()) {
             IpAddrRange ipAddrRange = ipAddrRangeCache.get(rangeId);
@@ -344,6 +361,7 @@ public class IpAddrRangeRepo implements ICacheRepository<IpAddrRange> {
         }
     }
 
+    @DurationStatistics
     public synchronized IpAddrRange getIpAddrRange(String rangeId) throws Exception {
         return ipAddrRangeCache.get(rangeId);
     }

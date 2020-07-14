@@ -67,7 +67,7 @@ public class IgniteConfiguration {
     @Value("${ignite.trust-store-password:#{null}}")
     private String trustStorePassword;
 
-    @Value("${ignite.thin.client.enable: #{false}}")
+    @Value("${ignite.thin.client.enable: #{true}}")
     private boolean thinClientEnable;
 
     @Bean

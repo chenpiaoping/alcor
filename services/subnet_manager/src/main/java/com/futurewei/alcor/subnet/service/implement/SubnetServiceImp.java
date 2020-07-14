@@ -4,6 +4,7 @@ package com.futurewei.alcor.subnet.service.implement;
 import com.futurewei.alcor.common.db.CacheException;
 import com.futurewei.alcor.common.entity.ResponseId;
 import com.futurewei.alcor.common.exception.FallbackException;
+import com.futurewei.alcor.common.stats.DurationStatistics;
 import com.futurewei.alcor.common.utils.ControllerUtil;
 import com.futurewei.alcor.subnet.config.IpVersionConfig;
 import com.futurewei.alcor.subnet.service.SubnetDatabaseService;
@@ -52,6 +53,7 @@ public class SubnetServiceImp implements SubnetService {
 
     @Async
     @Override
+    @DurationStatistics
     public void routeFallback(String routeId, String vpcId) {
         String routeManagerServiceUrl = routeUrl + "vpcs/" + vpcId + "/routes/" + routeId; // for kubernetes test
         restTemplate.delete(routeManagerServiceUrl, ResponseId.class);
@@ -59,6 +61,7 @@ public class SubnetServiceImp implements SubnetService {
 
     @Async
     @Override
+    @DurationStatistics
     public void macFallback(String macAddress) {
         String macManagerServiceUrl = macUrl + "/" + macAddress;
         restTemplate.delete(macManagerServiceUrl, ResponseId.class);
@@ -66,6 +69,7 @@ public class SubnetServiceImp implements SubnetService {
 
     @Async
     @Override
+    @DurationStatistics
     public void ipFallback(int ipVersion, String rangeId, String ipAddr) {
         String ipManagerServiceUrl = ipUrl + ipVersion + "/" + rangeId + "/" + ipAddr;
         restTemplate.delete(ipManagerServiceUrl, IpAddrRequest.class);
@@ -74,6 +78,7 @@ public class SubnetServiceImp implements SubnetService {
     }
 
     @Override
+    @DurationStatistics
     public void fallbackOperation(AtomicReference<RouteWebJson> routeResponseAtomic,
                                   AtomicReference<MacStateJson> macResponseAtomic,
                                   AtomicReference<IpAddrRequest> ipResponseAtomic,
@@ -113,6 +118,7 @@ public class SubnetServiceImp implements SubnetService {
     }
 
     @Override
+    @DurationStatistics
     public VpcWebJson verifyVpcId(String projectId, String vpcId) throws FallbackException {
         String vpcManagerServiceUrl = vpcUrl + projectId + "/vpcs/" + vpcId;
         VpcWebJson vpcResponse = restTemplate.getForObject(vpcManagerServiceUrl, VpcWebJson.class);
@@ -124,6 +130,7 @@ public class SubnetServiceImp implements SubnetService {
 
 
     @Override
+    @DurationStatistics
     public RouteWebJson createRouteRules(String subnetId, SubnetEntity subnetEntity) throws FallbackException {
         String routeManagerServiceUrl = routeUrl + "subnets/" + subnetId + "/routes";
         HttpEntity<SubnetWebJson> routeRequest = new HttpEntity<>(new SubnetWebJson(subnetEntity));
@@ -139,6 +146,7 @@ public class SubnetServiceImp implements SubnetService {
     }
 
     @Override
+    @DurationStatistics
     public MacStateJson allocateMacAddressForGatewayPort(String projectId, String vpcId, String portId) throws FallbackException {
         String macManagerServiceUrl = macUrl;
         MacState macState = new MacState();
@@ -159,6 +167,7 @@ public class SubnetServiceImp implements SubnetService {
     }
 
     @Override
+    @DurationStatistics
     public IpAddrRequest allocateIpAddressForGatewayPort(String subnetId, String cidr, String vpcId) throws FallbackException {
         String ipManagerServiceUrl = ipUrl;
         String ipManagerCreateRangeUrl = ipUrl + "range";
@@ -228,6 +237,7 @@ public class SubnetServiceImp implements SubnetService {
     }
 
     @Override
+    @DurationStatistics
     public String[] cidrToFirstIpAndLastIp(String cidr) {
         if (cidr == null) {
             return null;
@@ -245,6 +255,7 @@ public class SubnetServiceImp implements SubnetService {
     }
 
     @Override
+    @DurationStatistics
     public boolean verifyCidrBlock(String cidr) throws FallbackException {
         if (cidr == null) {
             return false;

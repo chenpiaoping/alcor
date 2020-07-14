@@ -72,4 +72,36 @@ public class NetworkConfiguration {
 
     this.securityGroups.add(securityGroup);
   }
+
+  public List<InternalPortEntity> getPortEntities() {
+    return portEntities;
+  }
+
+  public void setPortEntities(List<InternalPortEntity> portEntities) {
+    this.portEntities = portEntities;
+  }
+
+  public List<VpcEntity> getVpcEntities() {
+    return vpcEntities;
+  }
+
+  public void setVpcEntities(List<VpcEntity> vpcEntities) {
+    this.vpcEntities = vpcEntities;
+  }
+
+  public List<InternalSubnetEntity> getSubnetEntities() {
+    return subnetEntities;
+  }
+
+  public void setSubnetEntities(List<InternalSubnetEntity> subnetEntities) {
+    this.subnetEntities = subnetEntities;
+  }
+
+  public List<SecurityGroup> getSecurityGroups() {
+    return securityGroups;
+  }
+
+  public void setSecurityGroups(List<SecurityGroup> securityGroups) {
+    this.securityGroups = securityGroups;
+  }
 }

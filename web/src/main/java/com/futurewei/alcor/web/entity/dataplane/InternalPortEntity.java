@@ -13,11 +13,11 @@ Licensed under the Apache License, Version 2.0 (the "License");
 package com.futurewei.alcor.web.entity.dataplane;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.futurewei.alcor.common.entity.CustomerResource;
 import com.futurewei.alcor.web.entity.port.PortEntity;
 import com.futurewei.alcor.web.entity.route.RouteEntity;
 import lombok.Data;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -30,12 +30,36 @@ public class InternalPortEntity extends PortEntity {
     private List<NeighborInfo> neighborInfos;
 
     @JsonProperty("binding_host_ip")
-    private String bindingHostIP;
+    private String bindingHostIp;
 
-    public InternalPortEntity(PortEntity portEntity, List<RouteEntity> routeEntities, List<NeighborInfo> neighborInfos, String bindingHostIP) {
+    public InternalPortEntity(PortEntity portEntity, List<RouteEntity> routes, List<NeighborInfo> neighborInfos, String bindingHostIp) {
         super(portEntity);
-        this.routes = routeEntities;
+        this.routes = routes;
         this.neighborInfos = neighborInfos;
-        this.bindingHostIP = bindingHostIP;
+        this.bindingHostIp = bindingHostIp;
+    }
+
+    public List<RouteEntity> getRoutes() {
+        return routes;
+    }
+
+    public void setRoutes(List<RouteEntity> routes) {
+        this.routes = routes;
+    }
+
+    public List<NeighborInfo> getNeighborInfos() {
+        return neighborInfos;
+    }
+
+    public void setNeighborInfos(List<NeighborInfo> neighborInfos) {
+        this.neighborInfos = neighborInfos;
+    }
+
+    public String getBindingHostIp() {
+        return bindingHostIp;
+    }
+
+    public void setBindingHostIp(String bindingHostIp) {
+        this.bindingHostIp = bindingHostIp;
     }
 }
