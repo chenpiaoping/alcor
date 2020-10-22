@@ -15,7 +15,7 @@ Licensed under the Apache License, Version 2.0 (the "License");
 */
 package com.futurewei.alcor.dataplane.client.pulsar;
 
-import com.futurewei.alcor.dataplane.entity.MulticastGoalState;
+import com.futurewei.alcor.web.entity.dataplane.MulticastGoalState;
 import org.apache.pulsar.functions.api.Context;
 import org.apache.pulsar.functions.api.Function;
 import org.slf4j.Logger;

@@ -1,0 +1,17 @@
+Deploy unicast function
+./pulsar-admin functions create \
+--jar /home/chenpp/pulsar/dataplanemanager-0.1.0-SNAPSHOT.jar \
+--classname com.futurewei.alcor.dataplane.client.pulsar.UnicastFunction \
+--tenant public --namespace default \
+--name unicast-function \
+--inputs persistent://public/default/unicast-topic1 \
+--output persistent://public/default/group-topic1
+
+Deploy multicast function
+./pulsar-admin functions create \
+--jar /home/chenpp/pulsar/dataplanemanager-0.1.0-SNAPSHOT.jar \
+--classname com.futurewei.alcor.dataplane.client.pulsar.MulticastFunction \
+--tenant public --namespace default \
+--name multicast-function \
+--inputs persistent://public/default/multicast-topic1 \
+--output persistent://public/default/group-topic1

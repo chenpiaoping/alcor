@@ -17,9 +17,9 @@ package com.futurewei.alcor.dataplane.client.grpc;
 
 import com.futurewei.alcor.dataplane.client.DataPlaneClient;
 import com.futurewei.alcor.dataplane.config.grpc.GoalStateProvisionerClient;
-import com.futurewei.alcor.dataplane.entity.MulticastGoalState;
-import com.futurewei.alcor.dataplane.entity.UnicastGoalState;
 import com.futurewei.alcor.schema.Goalstate;
+import com.futurewei.alcor.web.entity.dataplane.MulticastGoalState;
+import com.futurewei.alcor.web.entity.dataplane.UnicastGoalState;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Component;
@@ -32,12 +32,12 @@ public class DataPlaneClientImpl implements DataPlaneClient {
     private int grpcPort = 6677;
 
     @Override
-    public void createGoalState(Goalstate.GoalState goalState, String hostIp) throws Exception {
+    public void createGoalStates(Goalstate.GoalState goalState, String hostIp) throws Exception {
 
     }
 
     @Override
-    public void createGoalState(List<UnicastGoalState> unicastGoalStates) throws Exception {
+    public void createGoalStates(List<UnicastGoalState> unicastGoalStates) throws Exception {
         for (UnicastGoalState unicastGoalState: unicastGoalStates) {
             GoalStateProvisionerClient goalStateProvisionerClient =
                     new GoalStateProvisionerClient(unicastGoalState.getNextTopic(), grpcPort);
@@ -47,12 +47,12 @@ public class DataPlaneClientImpl implements DataPlaneClient {
     }
 
     @Override
-    public void updateGoalState(List<UnicastGoalState> unicastGoalStates) throws Exception {
+    public void updateGoalStates(List<UnicastGoalState> unicastGoalStates) throws Exception {
 
     }
 
     @Override
-    public void deleteGoalState(List<UnicastGoalState> unicastGoalStates) throws Exception {
+    public void deleteGoalStates(List<UnicastGoalState> unicastGoalStates) throws Exception {
 
     }
 
@@ -68,6 +68,11 @@ public class DataPlaneClientImpl implements DataPlaneClient {
 
     @Override
     public void deleteGoalState(MulticastGoalState multicastGoalState) throws Exception {
+
+    }
+
+    @Override
+    public void createGoalStates(List<UnicastGoalState> unicastGoalStates, MulticastGoalState multicastGoalState) throws Exception {
 
     }
 }

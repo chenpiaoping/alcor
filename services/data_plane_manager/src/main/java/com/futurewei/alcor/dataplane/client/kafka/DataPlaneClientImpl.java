@@ -16,9 +16,9 @@ Licensed under the Apache License, Version 2.0 (the "License");
 package com.futurewei.alcor.dataplane.client.kafka;
 
 import com.futurewei.alcor.dataplane.client.DataPlaneClient;
-import com.futurewei.alcor.dataplane.entity.MulticastGoalState;
-import com.futurewei.alcor.dataplane.entity.UnicastGoalState;
 import com.futurewei.alcor.schema.Goalstate.GoalState;
+import com.futurewei.alcor.web.entity.dataplane.MulticastGoalState;
+import com.futurewei.alcor.web.entity.dataplane.UnicastGoalState;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Configuration;
 
@@ -29,22 +29,22 @@ import java.util.List;
 public class DataPlaneClientImpl implements DataPlaneClient {
 
     @Override
-    public void createGoalState(GoalState goalState, String hostIp) throws Exception {
+    public void createGoalStates(GoalState goalState, String hostIp) throws Exception {
 
     }
 
     @Override
-    public void createGoalState(List<UnicastGoalState> unicastGoalStates) throws Exception {
+    public void createGoalStates(List<UnicastGoalState> unicastGoalStates) throws Exception {
 
     }
 
     @Override
-    public void updateGoalState(List<UnicastGoalState> unicastGoalStates) throws Exception {
+    public void updateGoalStates(List<UnicastGoalState> unicastGoalStates) throws Exception {
 
     }
 
     @Override
-    public void deleteGoalState(List<UnicastGoalState> unicastGoalStates) throws Exception {
+    public void deleteGoalStates(List<UnicastGoalState> unicastGoalStates) throws Exception {
 
     }
 
@@ -60,6 +60,11 @@ public class DataPlaneClientImpl implements DataPlaneClient {
 
     @Override
     public void deleteGoalState(MulticastGoalState multicastGoalState) throws Exception {
+
+    }
+
+    @Override
+    public void createGoalStates(List<UnicastGoalState> unicastGoalStates, MulticastGoalState multicastGoalState) throws Exception {
 
     }
 }

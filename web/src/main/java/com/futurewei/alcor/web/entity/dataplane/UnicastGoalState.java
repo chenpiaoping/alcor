@@ -13,20 +13,21 @@ Licensed under the Apache License, Version 2.0 (the "License");
         See the License for the specific language governing permissions and
         limitations under the License.
 */
-package com.futurewei.alcor.dataplane.entity;
+package com.futurewei.alcor.web.entity.dataplane;
 
-import com.futurewei.alcor.schema.Goalstate;
+import com.futurewei.alcor.schema.Goalstate.GoalState;
 
 public class UnicastGoalState {
     private String hostIp;
     private String nextTopic;
-    private Goalstate.GoalState goalState;
+    private GoalState goalState;
+    private GoalState.Builder goalStateBuilder;
 
     public UnicastGoalState() {
-
+        goalStateBuilder = GoalState.newBuilder();
     }
 
-    public UnicastGoalState(String hostIp, Goalstate.GoalState goalState) {
+    public UnicastGoalState(String hostIp, GoalState goalState) {
         this.hostIp = hostIp;
         this.goalState = goalState;
     }
@@ -47,11 +48,19 @@ public class UnicastGoalState {
         this.nextTopic = nextTopic;
     }
 
-    public Goalstate.GoalState getGoalState() {
+    public GoalState getGoalState() {
         return goalState;
     }
 
-    public void setGoalState(Goalstate.GoalState goalState) {
+    public GoalState.Builder getGoalStateBuilder() {
+        return goalStateBuilder;
+    }
+
+    public void setGoalStateBuilder(GoalState.Builder goalStateBuilder) {
+        this.goalStateBuilder = goalStateBuilder;
+    }
+
+    public void setGoalState(GoalState goalState) {
         this.goalState = goalState;
     }
 }

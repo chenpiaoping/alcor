@@ -13,22 +13,25 @@ Licensed under the Apache License, Version 2.0 (the "License");
         See the License for the specific language governing permissions and
         limitations under the License.
 */
-package com.futurewei.alcor.dataplane.entity;
+package com.futurewei.alcor.web.entity.dataplane;
 
-import com.futurewei.alcor.schema.Goalstate;
+import com.futurewei.alcor.schema.Goalstate.GoalState;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class MulticastGoalState {
     private List<String> hostIps;
     private List<String> nextTopics;
-    private Goalstate.GoalState goalState;
+    private GoalState goalState;
+    private GoalState.Builder goalStateBuilder;
 
     public MulticastGoalState() {
-
+        hostIps = new ArrayList<>();
+        goalStateBuilder = GoalState.newBuilder();
     }
 
-    public MulticastGoalState(List<String> hostIps, Goalstate.GoalState goalState) {
+    public MulticastGoalState(List<String> hostIps, GoalState goalState) {
         this.hostIps = hostIps;
         this.goalState = goalState;
     }
@@ -49,11 +52,19 @@ public class MulticastGoalState {
         this.nextTopics = nextTopics;
     }
 
-    public Goalstate.GoalState getGoalState() {
+    public GoalState getGoalState() {
         return goalState;
     }
 
-    public void setGoalState(Goalstate.GoalState goalState) {
+    public GoalState.Builder getGoalStateBuilder() {
+        return goalStateBuilder;
+    }
+
+    public void setGoalStateBuilder(GoalState.Builder goalStateBuilder) {
+        this.goalStateBuilder = goalStateBuilder;
+    }
+
+    public void setGoalState(GoalState goalState) {
         this.goalState = goalState;
     }
 }

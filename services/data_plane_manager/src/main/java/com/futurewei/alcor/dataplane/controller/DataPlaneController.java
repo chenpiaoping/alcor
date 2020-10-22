@@ -19,9 +19,12 @@ import com.futurewei.alcor.common.stats.DurationStatistics;
 import com.futurewei.alcor.dataplane.service.DataPlaneService;
 import com.futurewei.alcor.web.entity.dataplane.NetworkConfiguration;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+@RestController
+@ComponentScan(value = "com.futurewei.alcor.common.stats")
 public class DataPlaneController {
     @Autowired
     private DataPlaneService dataPlaneService;

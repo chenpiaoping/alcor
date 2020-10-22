@@ -16,11 +16,11 @@ Licensed under the Apache License, Version 2.0 (the "License");
 package com.futurewei.alcor.dataplane.client.pulsar;
 
 import com.futurewei.alcor.dataplane.client.DataPlaneClient;
-import com.futurewei.alcor.dataplane.entity.MulticastGoalState;
-import com.futurewei.alcor.dataplane.entity.UnicastGoalState;
 import com.futurewei.alcor.dataplane.exception.GroupTopicNotFound;
 import com.futurewei.alcor.dataplane.exception.MulticastTopicNotFound;
 import com.futurewei.alcor.schema.Goalstate.GoalState;
+import com.futurewei.alcor.web.entity.dataplane.MulticastGoalState;
+import com.futurewei.alcor.web.entity.dataplane.UnicastGoalState;
 import org.apache.pulsar.client.api.Producer;
 import org.apache.pulsar.client.api.PulsarClient;
 import org.apache.pulsar.client.impl.schema.JSONSchema;
@@ -48,12 +48,12 @@ public class DataPlaneClientImpl implements DataPlaneClient {
     private PulsarClient pulsarClient;
 
     @Override
-    public void createGoalState(GoalState goalState, String hostIp) throws Exception {
+    public void createGoalStates(GoalState goalState, String hostIp) throws Exception {
 
     }
 
     @Override
-    public void createGoalState(List<UnicastGoalState> unicastGoalStates) throws Exception {
+    public void createGoalStates(List<UnicastGoalState> unicastGoalStates) throws Exception {
         for (UnicastGoalState unicastGoalState: unicastGoalStates) {
             String nextTopic = topicManager.getGroupTopicByHostIp(unicastGoalState.getHostIp());
             if (StringUtils.isEmpty(nextTopic)) {
@@ -80,12 +80,12 @@ public class DataPlaneClientImpl implements DataPlaneClient {
     }
 
     @Override
-    public void updateGoalState(List<UnicastGoalState> unicastGoalStates) throws Exception {
+    public void updateGoalStates(List<UnicastGoalState> unicastGoalStates) throws Exception {
 
     }
 
     @Override
-    public void deleteGoalState(List<UnicastGoalState> unicastGoalStates) throws Exception {
+    public void deleteGoalStates(List<UnicastGoalState> unicastGoalStates) throws Exception {
 
     }
 
@@ -114,7 +114,7 @@ public class DataPlaneClientImpl implements DataPlaneClient {
                 throw new MulticastTopicNotFound();
             }
 
-            if (!multicastTopic.contains(multicastTopic)) {
+            if (!multicastTopics.containsKey(multicastTopic)) {
                 multicastTopics.put(multicastTopic, new ArrayList<>());
             }
 
@@ -155,5 +155,11 @@ public class DataPlaneClientImpl implements DataPlaneClient {
     @Override
     public void deleteGoalState(MulticastGoalState multicastGoalState) throws Exception {
 
+    }
+    @Override
+    public void createGoalStates(List<UnicastGoalState> unicastGoalStates,
+                                 MulticastGoalState multicastGoalState) throws Exception {
+        createGoalStates(unicastGoalStates);
+        createGoalState(multicastGoalState);
     }
 }

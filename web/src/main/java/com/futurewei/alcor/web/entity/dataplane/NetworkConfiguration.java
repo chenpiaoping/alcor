@@ -21,6 +21,7 @@ import lombok.Data;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @Data
 public class NetworkConfiguration {
@@ -41,10 +42,10 @@ public class NetworkConfiguration {
   private List<SecurityGroup> securityGroups;
 
   @JsonProperty("neighbor_info")
-  private List<NeighborInfo> neighborInfos;
+  private Map<String, NeighborInfo> neighborInfos;
 
   @JsonProperty("neighbor_table")
-  private List<NeighborEntry> neighborTable;
+  private Map<String, List<NeighborEntry>> neighborTable;
 
   public void addPortEntity(InternalPortEntity portEntity) {
     if (this.portEntities == null) {
@@ -126,19 +127,19 @@ public class NetworkConfiguration {
     this.securityGroups = securityGroups;
   }
 
-  public List<NeighborInfo> getNeighborInfos() {
+  public Map<String, NeighborInfo> getNeighborInfos() {
     return neighborInfos;
   }
 
-  public void setNeighborInfos(List<NeighborInfo> neighborInfos) {
+  public void setNeighborInfos(Map<String, NeighborInfo> neighborInfos) {
     this.neighborInfos = neighborInfos;
   }
 
-  public List<NeighborEntry> getNeighborTable() {
+  public Map<String, List<NeighborEntry>> getNeighborTable() {
     return neighborTable;
   }
 
-  public void setNeighborTable(List<NeighborEntry> neighborTable) {
+  public void setNeighborTable(Map<String, List<NeighborEntry>> neighborTable) {
     this.neighborTable = neighborTable;
   }
 
