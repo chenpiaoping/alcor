@@ -15,16 +15,29 @@ Licensed under the Apache License, Version 2.0 (the "License");
 */
 package com.futurewei.alcor.dataplane.client.pulsar;
 
+import com.futurewei.alcor.common.executor.ThreadPoolExecutorConfig;
 import com.futurewei.alcor.web.entity.dataplane.MulticastGoalStateByte;
+import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import org.apache.pulsar.functions.api.Context;
 import org.apache.pulsar.functions.api.Function;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 public class MulticastFunction implements Function<MulticastGoalStateByte, MulticastGoalStateByte> {
     private static final Logger LOG = LoggerFactory.getLogger(MulticastFunction.class);
+    public static final ThreadPoolExecutor executor = new ThreadPoolExecutor(
+            20,
+            50,
+            5000,
+            TimeUnit.MILLISECONDS,
+            new LinkedBlockingQueue<>(1024),
+            new ThreadFactoryBuilder().setNameFormat("MulticastFunctionThreadPoolExecutor-%d").build());
 
     @Override
     public MulticastGoalStateByte process(MulticastGoalStateByte multicastGoalStateByte, Context context) throws Exception {
@@ -39,7 +52,10 @@ public class MulticastFunction implements Function<MulticastGoalStateByte, Multi
 
         for (String nextTopic: nextTopics) {
             LOG.info("Publish multicastGoalState to nextTopic:{}", nextTopic);
-            context.publish(nextTopic, multicastGoalStateByte.getGoalStateByte());
+
+            CompletableFuture.supplyAsync(()->{
+                return context.publish(nextTopic, multicastGoalStateByte.getGoalStateByte());
+            }, executor);
         }
 
         return multicastGoalStateByte;
