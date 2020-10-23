@@ -17,8 +17,8 @@ package com.futurewei.alcor.dataplane.client.kafka;
 
 import com.futurewei.alcor.dataplane.client.DataPlaneClient;
 import com.futurewei.alcor.schema.Goalstate.GoalState;
-import com.futurewei.alcor.web.entity.dataplane.MulticastGoalState;
-import com.futurewei.alcor.web.entity.dataplane.UnicastGoalState;
+import com.futurewei.alcor.dataplane.entity.MulticastGoalState;
+import com.futurewei.alcor.dataplane.entity.UnicastGoalState;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Configuration;
 

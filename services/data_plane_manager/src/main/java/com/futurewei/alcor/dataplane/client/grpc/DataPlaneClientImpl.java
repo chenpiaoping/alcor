@@ -18,11 +18,10 @@ package com.futurewei.alcor.dataplane.client.grpc;
 import com.futurewei.alcor.dataplane.client.DataPlaneClient;
 import com.futurewei.alcor.dataplane.config.grpc.GoalStateProvisionerClient;
 import com.futurewei.alcor.schema.Goalstate;
-import com.futurewei.alcor.web.entity.dataplane.MulticastGoalState;
-import com.futurewei.alcor.web.entity.dataplane.UnicastGoalState;
+import com.futurewei.alcor.dataplane.entity.MulticastGoalState;
+import com.futurewei.alcor.dataplane.entity.UnicastGoalState;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.stereotype.Component;
 
 import java.util.List;
 

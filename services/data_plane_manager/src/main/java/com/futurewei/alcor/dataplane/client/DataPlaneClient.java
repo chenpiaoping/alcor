@@ -16,8 +16,8 @@ Licensed under the Apache License, Version 2.0 (the "License");
 package com.futurewei.alcor.dataplane.client;
 
 import com.futurewei.alcor.schema.Goalstate.GoalState;
-import com.futurewei.alcor.web.entity.dataplane.MulticastGoalState;
-import com.futurewei.alcor.web.entity.dataplane.UnicastGoalState;
+import com.futurewei.alcor.dataplane.entity.MulticastGoalState;
+import com.futurewei.alcor.dataplane.entity.UnicastGoalState;
 
 import java.util.List;
 

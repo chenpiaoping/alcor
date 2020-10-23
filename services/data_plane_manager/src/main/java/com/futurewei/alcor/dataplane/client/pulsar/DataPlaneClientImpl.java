@@ -19,8 +19,10 @@ import com.futurewei.alcor.dataplane.client.DataPlaneClient;
 import com.futurewei.alcor.dataplane.exception.GroupTopicNotFound;
 import com.futurewei.alcor.dataplane.exception.MulticastTopicNotFound;
 import com.futurewei.alcor.schema.Goalstate.GoalState;
-import com.futurewei.alcor.web.entity.dataplane.MulticastGoalState;
-import com.futurewei.alcor.web.entity.dataplane.UnicastGoalState;
+import com.futurewei.alcor.dataplane.entity.MulticastGoalState;
+import com.futurewei.alcor.dataplane.entity.UnicastGoalState;
+import com.futurewei.alcor.web.entity.dataplane.MulticastGoalStateByte;
+import com.futurewei.alcor.web.entity.dataplane.UnicastGoalStateByte;
 import org.apache.pulsar.client.api.Producer;
 import org.apache.pulsar.client.api.PulsarClient;
 import org.apache.pulsar.client.impl.schema.JSONSchema;
@@ -52,6 +54,14 @@ public class DataPlaneClientImpl implements DataPlaneClient {
 
     }
 
+    private UnicastGoalStateByte buildUnicastGoalStateByte(UnicastGoalState unicastGoalState) {
+        UnicastGoalStateByte unicastGoalStateByte = new UnicastGoalStateByte();
+        unicastGoalStateByte.setNextTopic(unicastGoalState.getNextTopic());
+        unicastGoalStateByte.setGoalStateByte(unicastGoalState.getGoalState().toByteArray());
+
+        return unicastGoalStateByte;
+    }
+
     @Override
     public void createGoalStates(List<UnicastGoalState> unicastGoalStates) throws Exception {
         for (UnicastGoalState unicastGoalState: unicastGoalStates) {
@@ -67,12 +77,12 @@ public class DataPlaneClientImpl implements DataPlaneClient {
                 topic = unicastTopic;
             }
 
-            Producer<UnicastGoalState> producer = pulsarClient
-                    .newProducer(JSONSchema.of(UnicastGoalState.class))
+            Producer<UnicastGoalStateByte> producer = pulsarClient
+                    .newProducer(JSONSchema.of(UnicastGoalStateByte.class))
                     .topic(topic)
                     .enableBatching(false)
                     .create();
-            producer.send(unicastGoalState);
+            producer.send(buildUnicastGoalStateByte(unicastGoalState));
 
             LOG.info("Send unicastGoalStates to topic:{} success, " +
                     "unicastGoalStates: {}", nextTopic, unicastGoalState);
@@ -124,6 +134,14 @@ public class DataPlaneClientImpl implements DataPlaneClient {
         return multicastTopics;
     }
 
+    private MulticastGoalStateByte buildMulticastGoalStateByte(MulticastGoalState multicastGoalState) {
+        MulticastGoalStateByte multicastGoalStateByte = new MulticastGoalStateByte();
+        multicastGoalStateByte.setNextTopics(multicastGoalState.getNextTopics());
+        multicastGoalStateByte.setGoalStateByte(multicastGoalState.getGoalState().toByteArray());
+
+        return multicastGoalStateByte;
+    }
+
     @Override
     public void createGoalState(MulticastGoalState multicastGoalState) throws Exception {
         Map<String, List<String>> multicastTopics = getMulticastTopics(multicastGoalState.getHostIps());
@@ -134,12 +152,13 @@ public class DataPlaneClientImpl implements DataPlaneClient {
 
             multicastGoalState.setNextTopics(groupTopics);
 
-            Producer<MulticastGoalState> producer = pulsarClient
-                    .newProducer(JSONSchema.of(MulticastGoalState.class))
+            Producer<MulticastGoalStateByte> producer = pulsarClient
+                    .newProducer(JSONSchema.of(MulticastGoalStateByte.class))
                     .topic(multicastTopic)
                     .enableBatching(false)
                     .create();
-            producer.send(multicastGoalState);
+
+            producer.send(buildMulticastGoalStateByte(multicastGoalState));
 
             LOG.info("Send multicastGoalState to topic:{} success, " +
                     "groupTopics: {}, unicastGoalStates: {}",

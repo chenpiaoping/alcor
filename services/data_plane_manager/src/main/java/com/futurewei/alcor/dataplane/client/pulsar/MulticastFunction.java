@@ -15,7 +15,7 @@ Licensed under the Apache License, Version 2.0 (the "License");
 */
 package com.futurewei.alcor.dataplane.client.pulsar;
 
-import com.futurewei.alcor.web.entity.dataplane.MulticastGoalState;
+import com.futurewei.alcor.web.entity.dataplane.MulticastGoalStateByte;
 import org.apache.pulsar.functions.api.Context;
 import org.apache.pulsar.functions.api.Function;
 import org.slf4j.Logger;
@@ -23,25 +23,25 @@ import org.slf4j.LoggerFactory;
 
 import java.util.List;
 
-public class MulticastFunction implements Function<MulticastGoalState, MulticastGoalState> {
+public class MulticastFunction implements Function<MulticastGoalStateByte, MulticastGoalStateByte> {
     private static final Logger LOG = LoggerFactory.getLogger(MulticastFunction.class);
 
     @Override
-    public MulticastGoalState process(MulticastGoalState multicastGoalState, Context context) throws Exception {
+    public MulticastGoalStateByte process(MulticastGoalStateByte multicastGoalStateByte, Context context) throws Exception {
         LOG.info("Receive MulticastGoalState from topic:{}, multicastGoalState:{}",
-                context.getInputTopics(), multicastGoalState);
+                context.getInputTopics(), multicastGoalStateByte);
 
-        List<String> nextTopics = multicastGoalState.getNextTopics();
+        List<String> nextTopics = multicastGoalStateByte.getNextTopics();
         if (nextTopics == null || nextTopics.size() == 0) {
             LOG.warn("Next topics of multicastGoalState is null, do nothing");
-            return multicastGoalState;
+            return multicastGoalStateByte;
         }
 
         for (String nextTopic: nextTopics) {
             LOG.info("Publish multicastGoalState to nextTopic:{}", nextTopic);
-            context.publish(nextTopic, multicastGoalState);
+            context.publish(nextTopic, multicastGoalStateByte.getGoalStateByte());
         }
 
-        return multicastGoalState;
+        return multicastGoalStateByte;
     }
 }

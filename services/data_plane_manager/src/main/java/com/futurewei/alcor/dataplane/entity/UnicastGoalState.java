@@ -13,43 +13,39 @@ Licensed under the Apache License, Version 2.0 (the "License");
         See the License for the specific language governing permissions and
         limitations under the License.
 */
-package com.futurewei.alcor.web.entity.dataplane;
+package com.futurewei.alcor.dataplane.entity;
 
 import com.futurewei.alcor.schema.Goalstate.GoalState;
 
-import java.util.ArrayList;
-import java.util.List;
-
-public class MulticastGoalState {
-    private List<String> hostIps;
-    private List<String> nextTopics;
+public class UnicastGoalState {
+    private String hostIp;
+    private String nextTopic;
     private GoalState goalState;
     private GoalState.Builder goalStateBuilder;
 
-    public MulticastGoalState() {
-        hostIps = new ArrayList<>();
+    public UnicastGoalState() {
         goalStateBuilder = GoalState.newBuilder();
     }
 
-    public MulticastGoalState(List<String> hostIps, GoalState goalState) {
-        this.hostIps = hostIps;
+    public UnicastGoalState(String hostIp, GoalState goalState) {
+        this.hostIp = hostIp;
         this.goalState = goalState;
     }
 
-    public List<String> getHostIps() {
-        return hostIps;
+    public String getHostIp() {
+        return hostIp;
     }
 
-    public void setHostIps(List<String> hostIps) {
-        this.hostIps = hostIps;
+    public void setHostIp(String hostIp) {
+        this.hostIp = hostIp;
     }
 
-    public List<String> getNextTopics() {
-        return nextTopics;
+    public String getNextTopic() {
+        return nextTopic;
     }
 
-    public void setNextTopics(List<String> nextTopics) {
-        this.nextTopics = nextTopics;
+    public void setNextTopic(String nextTopic) {
+        this.nextTopic = nextTopic;
     }
 
     public GoalState getGoalState() {

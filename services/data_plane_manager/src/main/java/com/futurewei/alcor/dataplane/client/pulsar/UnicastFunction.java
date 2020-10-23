@@ -15,29 +15,29 @@ Licensed under the Apache License, Version 2.0 (the "License");
 */
 package com.futurewei.alcor.dataplane.client.pulsar;
 
-import com.futurewei.alcor.web.entity.dataplane.UnicastGoalState;
+import com.futurewei.alcor.web.entity.dataplane.UnicastGoalStateByte;
 import org.apache.pulsar.functions.api.Context;
 import org.apache.pulsar.functions.api.Function;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class UnicastFunction implements Function<UnicastGoalState, UnicastGoalState> {
+public class UnicastFunction implements Function<UnicastGoalStateByte, UnicastGoalStateByte> {
     private static final Logger LOG = LoggerFactory.getLogger(UnicastFunction.class);
 
     @Override
-    public UnicastGoalState process(UnicastGoalState unicastGoalState, Context context) throws Exception {
+    public UnicastGoalStateByte process(UnicastGoalStateByte unicastGoalStateByte, Context context) throws Exception {
         LOG.info("Receive UnicastGoalState from topic:{}, unicastGoalState:{}",
-                context.getInputTopics(), unicastGoalState);
+                context.getInputTopics(), unicastGoalStateByte);
 
-        String nextTopic = unicastGoalState.getNextTopic();
+        String nextTopic = unicastGoalStateByte.getNextTopic();
         if (nextTopic == null || "".equals(nextTopic)) {
             LOG.warn("Next topic of unicastGoalState is null, do nothing");
-            return unicastGoalState;
+            return unicastGoalStateByte;
         }
 
         LOG.info("Publish unicastGoalState to nextTopic:{}", nextTopic);
-        context.publish(nextTopic, unicastGoalState);
+        context.publish(nextTopic, unicastGoalStateByte.getGoalStateByte());
 
-        return unicastGoalState;
+        return unicastGoalStateByte;
     }
 }

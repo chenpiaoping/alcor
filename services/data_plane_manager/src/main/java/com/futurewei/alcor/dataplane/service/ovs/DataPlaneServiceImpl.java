@@ -16,9 +16,10 @@ Licensed under the Apache License, Version 2.0 (the "License");
 package com.futurewei.alcor.dataplane.service.ovs;
 
 import com.futurewei.alcor.dataplane.client.DataPlaneClient;
+import com.futurewei.alcor.dataplane.entity.MulticastGoalState;
+import com.futurewei.alcor.dataplane.entity.UnicastGoalState;
 import com.futurewei.alcor.dataplane.exception.*;
 import com.futurewei.alcor.dataplane.service.DataPlaneService;
-import com.futurewei.alcor.schema.Common.MessageType;
 import com.futurewei.alcor.schema.Common.NetworkType;
 import com.futurewei.alcor.schema.Common.EtherType;
 import com.futurewei.alcor.schema.Common.Protocol;
@@ -28,6 +29,7 @@ import com.futurewei.alcor.schema.DHCP.DHCPConfiguration;
 import com.futurewei.alcor.schema.Neighbor.NeighborState;
 import com.futurewei.alcor.schema.Neighbor.NeighborConfiguration;
 import com.futurewei.alcor.schema.Neighbor.NeighborType;
+import com.futurewei.alcor.schema.Port;
 import com.futurewei.alcor.schema.Port.PortConfiguration;
 import com.futurewei.alcor.schema.Port.PortConfiguration.HostInfo;
 import com.futurewei.alcor.schema.Port.PortConfiguration.FixedIp;
@@ -171,7 +173,7 @@ public class DataPlaneServiceImpl implements DataPlaneService {
         for (InternalPortEntity portEntity: portEntities) {
             PortConfiguration.Builder portConfigBuilder = PortConfiguration.newBuilder();
             portConfigBuilder.setId(portEntity.getId());
-            portConfigBuilder.setMessageType(MessageType.FULL);
+            portConfigBuilder.setMessageType(Port.MessageType.FULL);
             portConfigBuilder.setNetworkType(NetworkType.VXLAN);
             portConfigBuilder.setProjectId(portEntity.getProjectId());
             portConfigBuilder.setVpcId(portEntity.getVpcId());
@@ -226,12 +228,12 @@ public class DataPlaneServiceImpl implements DataPlaneService {
         //neighborConfigBuilder.setName();
         neighborConfigBuilder.setMacAddress(neighborInfo.getPortMac());
         neighborConfigBuilder.setHostIpAddress(neighborInfo.getHostIp());
+        NeighborType neighborType = NeighborType.valueOf(neighborEntry.getNeighborType().getType());
+        neighborConfigBuilder.setNeighborType(neighborType);
         //TODO:setNeighborHostDvrMac
         //neighborConfigBuilder.setNeighborHostDvrMac();
         NeighborConfiguration.FixedIp.Builder fixedIpBuilder = NeighborConfiguration.FixedIp.newBuilder();
         fixedIpBuilder.setSubnetId(neighborInfo.getSubnetId());
-        NeighborType neighborType = NeighborType.valueOf(neighborEntry.getNeighborType().getType());
-        fixedIpBuilder.setNeighborType(neighborType);
         fixedIpBuilder.setIpAddress(neighborInfo.getPortIp());
         neighborConfigBuilder.addFixedIps(fixedIpBuilder.build());
         //TODO:setAllowAddressPairs
@@ -452,6 +454,8 @@ public class DataPlaneServiceImpl implements DataPlaneService {
         buildSecurityGroupStates(networkConfig, unicastGoalState);
         buildDhcpStates(networkConfig, unicastGoalState);
         buildRouterStates(networkConfig, unicastGoalState);
+
+        unicastGoalState.setGoalState(unicastGoalState.getGoalStateBuilder().build());
 
         return unicastGoalState;
     }
