@@ -88,8 +88,15 @@ public class DataPlaneServiceImpl implements DataPlaneService {
             VpcConfiguration.Builder vpcConfigBuilder = VpcConfiguration.newBuilder();
             vpcConfigBuilder.setId(vpcEntity.getId());
             vpcConfigBuilder.setProjectId(vpcEntity.getProjectId());
-            vpcConfigBuilder.setName(vpcEntity.getName());
-            vpcConfigBuilder.setCidr(vpcEntity.getCidr());
+
+            if (vpcEntity.getName() != null) {
+                vpcConfigBuilder.setName(vpcEntity.getName());
+            }
+
+            if (vpcEntity.getCidr() != null) {
+                vpcConfigBuilder.setCidr(vpcEntity.getCidr());
+            }
+
             //vpcConfigBuilder.setTunnelId();
 
             if (networkConfig.getSubnets() != null) {
@@ -156,10 +163,22 @@ public class DataPlaneServiceImpl implements DataPlaneService {
             gatewayBuilder.setIpAddress(subnetEntity.getGatewayIp());
             gatewayBuilder.setMacAddress(subnetEntity.getGatewayMacAddress());
             subnetConfigBuilder.setGateway(gatewayBuilder.build());
-            subnetConfigBuilder.setDhcpEnable(subnetEntity.getDhcpEnable());
-            subnetConfigBuilder.setAvailabilityZone(subnetEntity.getAvailabilityZone());
-            subnetConfigBuilder.setPrimaryDns(subnetEntity.getPrimaryDns());
-            subnetConfigBuilder.setSecondaryDns(subnetEntity.getSecondaryDns());
+
+            if (subnetEntity.getDhcpEnable() != null) {
+                subnetConfigBuilder.setDhcpEnable(subnetEntity.getDhcpEnable());
+            }
+
+            if (subnetEntity.getAvailabilityZone() != null) {
+                subnetConfigBuilder.setAvailabilityZone(subnetEntity.getAvailabilityZone());
+            }
+
+            if (subnetEntity.getPrimaryDns() != null) {
+                subnetConfigBuilder.setPrimaryDns(subnetEntity.getPrimaryDns());
+            }
+
+            if (subnetEntity.getSecondaryDns() != null) {
+                subnetConfigBuilder.setSecondaryDns(subnetEntity.getSecondaryDns());
+            }
 
             SubnetState.Builder subnetStateBuilder = SubnetState.newBuilder();
             subnetStateBuilder.setOperationType(networkConfig.getOpType());
@@ -177,7 +196,11 @@ public class DataPlaneServiceImpl implements DataPlaneService {
             portConfigBuilder.setNetworkType(NetworkType.VXLAN);
             portConfigBuilder.setProjectId(portEntity.getProjectId());
             portConfigBuilder.setVpcId(portEntity.getVpcId());
-            portConfigBuilder.setName(portEntity.getName());
+
+            if (portEntity.getName() != null) {
+                portConfigBuilder.setName(portEntity.getName());
+            }
+
             portConfigBuilder.setMacAddress(portEntity.getMacAddress());
             portConfigBuilder.setAdminStateUp(portEntity.isAdminStateUp());
 

@@ -23,6 +23,8 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import static com.futurewei.alcor.dataplane.utils.RestParameterValidator.checkNetworkConfiguration;
+
 @RestController
 @ComponentScan(value = "com.futurewei.alcor.common.stats")
 public class DataPlaneController {
@@ -33,18 +35,21 @@ public class DataPlaneController {
     @ResponseStatus(HttpStatus.CREATED)
     @DurationStatistics
     public NetworkConfiguration createNetworkConfiguration(@RequestBody NetworkConfiguration networkConfiguration) throws Exception {
+        checkNetworkConfiguration(networkConfiguration);
         return dataPlaneService.createNetworkConfiguration(networkConfiguration);
     }
 
     @PutMapping({"/network-configuration", "v4/network-configuration"})
     @DurationStatistics
     public NetworkConfiguration updateNetworkConfiguration(@RequestBody NetworkConfiguration networkConfiguration) throws Exception {
+        checkNetworkConfiguration(networkConfiguration);
         return dataPlaneService.updateNetworkConfiguration(networkConfiguration);
     }
 
     @DeleteMapping({"/network-configuration", "v4/network-configuration"})
     @DurationStatistics
     public NetworkConfiguration deleteNetworkConfiguration(@RequestBody NetworkConfiguration networkConfiguration) throws Exception {
+        checkNetworkConfiguration(networkConfiguration);
         return dataPlaneService.deleteNetworkConfiguration(networkConfiguration);
     }
 }

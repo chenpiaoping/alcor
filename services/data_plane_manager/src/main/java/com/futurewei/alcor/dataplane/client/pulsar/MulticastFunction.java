@@ -15,7 +15,6 @@ Licensed under the Apache License, Version 2.0 (the "License");
 */
 package com.futurewei.alcor.dataplane.client.pulsar;
 
-import com.futurewei.alcor.common.executor.ThreadPoolExecutorConfig;
 import com.futurewei.alcor.web.entity.dataplane.MulticastGoalStateByte;
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import org.apache.pulsar.functions.api.Context;

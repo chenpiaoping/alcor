@@ -67,6 +67,7 @@ public class DataPlaneClientImpl implements DataPlaneClient {
         for (UnicastGoalState unicastGoalState: unicastGoalStates) {
             String nextTopic = topicManager.getGroupTopicByHostIp(unicastGoalState.getHostIp());
             if (StringUtils.isEmpty(nextTopic)) {
+                LOG.error("Can not find next topic by host ip:{}", unicastGoalState.getHostIp());
                 throw new GroupTopicNotFound();
             }
 
@@ -105,6 +106,7 @@ public class DataPlaneClientImpl implements DataPlaneClient {
         for (String hostIp: hostIps) {
             String groupTopic = topicManager.getGroupTopicByHostIp(hostIp);
             if (StringUtils.isEmpty(groupTopic)) {
+                LOG.error("Can not find group topic by host ip:{}", hostIp);
                 throw new GroupTopicNotFound();
             }
 
@@ -121,6 +123,7 @@ public class DataPlaneClientImpl implements DataPlaneClient {
         for (String groupTopic: groupTopics) {
             String multicastTopic = topicManager.getMulticastTopicByGroupTopic(groupTopic);
             if (StringUtils.isEmpty(multicastTopic)) {
+                LOG.error("Can not find multicast topic by group topic:{}", groupTopic);
                 throw new MulticastTopicNotFound();
             }
 
